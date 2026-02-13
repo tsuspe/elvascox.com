@@ -49,15 +49,34 @@ npm run dev
 - `llms.txt`: `https://www.elvascox.com/llms.txt`
 
 ## Screenshots
-Placeholders preparados en:
-- `docs/images/README.md`
+Regenerar:
+```bash
+npm run screenshots
+```
 
-Nombres esperados:
-- `docs/images/home.png`
-- `docs/images/work-list.png`
-- `docs/images/work-detail.png`
-- `docs/images/search.png`
-- `docs/images/admin.png`
+Desktop (1440x900)
+
+| Home | Work |
+|---|---|
+| ![Home Desktop](docs/images/home-desktop.png) | ![Work Desktop](docs/images/work-desktop.png) |
+
+| Tattoo | Musica |
+|---|---|
+| ![Tattoo Desktop](docs/images/tattoo-desktop.png) | ![Musica Desktop](docs/images/musica-desktop.png) |
+
+| Film | Journal |
+|---|---|
+| ![Film Desktop](docs/images/film-desktop.png) | ![Journal Desktop](docs/images/journal-desktop.png) |
+
+| Bio |
+|---|
+| ![Bio Desktop](docs/images/bio-desktop.png) |
+
+Mobile (390x844)
+
+| Home | Work |
+|---|---|
+| ![Home Mobile](docs/images/home-mobile.png) | ![Work Mobile](docs/images/work-mobile.png) |
 
 ## Lo que aprenderá un reclutador
 - Diseño e implementación de una app fullstack end-to-end en producción.

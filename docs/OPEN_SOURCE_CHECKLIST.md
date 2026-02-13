@@ -10,6 +10,7 @@
 - Verificar que `README.md` refleja el estado real del proyecto.
 - Añadir capturas o GIFs del producto en producción (opcional, recomendado).
 - Completar descripción del repo y topics en GitHub.
+- Revisar screenshots antes de commitear para evitar datos sensibles en imágenes.
 
 ## Calidad técnica
 - Ejecutar:
