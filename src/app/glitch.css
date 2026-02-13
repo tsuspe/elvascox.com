@@ -1,0 +1,214 @@
+/* src/app/glitch.css */
+/* =========
+   GLITCH FLASH (tu base)
+   ========= */
+.glitch-hover {
+  position: relative;
+}
+
+.glitch-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: screen;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.18),
+    rgba(255, 0, 0, 0.02),
+    rgba(255, 0, 0, 0.18)
+  );
+  transform: translateX(-2px);
+}
+
+/* dispara el flash */
+.group:hover .glitch-hover::after {
+  animation: glitchflash 140ms steps(2, end) 1 forwards;
+}
+
+@keyframes glitchflash {
+  0% {
+    opacity: 0;
+    transform: translateX(-2px);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateX(2px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+}
+
+/* =========
+   GLITCH FRAME (para CARDS, más evidente)
+   ========= */
+.glitch-frame {
+  position: relative;
+}
+
+.glitch-frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  border: 1px solid rgba(255, 0, 0, 0.22);
+  box-shadow: 0 0 0 1px rgba(255, 0, 0, 0.08) inset;
+  transform: translateX(0);
+}
+
+.group:hover .glitch-frame::before {
+  animation: frameglitch 160ms steps(2, end) 1 forwards;
+}
+
+@keyframes frameglitch {
+  0% {
+    opacity: 0;
+    transform: translateX(-1px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(1px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+  }
+}
+
+/* barra roja sutil abajo */
+.glitch-bar {
+  position: relative;
+}
+
+.glitch-bar::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  height: 1px;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(255, 0, 0, 0.35);
+}
+
+.group:hover .glitch-bar::after {
+  animation: barflash 140ms steps(2, end) 1 forwards;
+}
+
+@keyframes barflash {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* =========
+   OPCIONAL: scanline suave (si la quieres)
+   ========= */
+@keyframes scan {
+  0% { transform: translateY(-20%); }
+  100% { transform: translateY(120%); }
+}
+
+.scanline {
+  position: relative;
+}
+
+.scanline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -20%;
+  height: 35%;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(
+    transparent,
+    rgba(255, 255, 255, 0.03),
+    transparent
+  );
+}
+
+.group:hover .scanline::after {
+  opacity: 1;
+  animation: scan 1.6s linear infinite;
+}
+
+
+
+.bio-glitch-x {
+  animation: glitch-pulse 2.8s infinite;
+}
+
+@keyframes glitch-pulse {
+  0% { filter: none; }
+  48% { filter: none; }
+  50% { filter: hue-rotate(-15deg) saturate(1.2); }
+  52% { filter: hue-rotate(15deg) saturate(1.4); }
+  55% { filter: none; }
+}
+
+
+/* ===== BIO MICRO GLITCH .X — AGRESIVO CONTROLADO ===== */
+
+.bio-glitch-x {
+  position: relative;
+  display: inline-block;
+  color: #ef4444;
+  text-shadow:
+    0 0 6px rgba(239, 68, 68, 0.35),
+    0 0 18px rgba(239, 68, 68, 0.15);
+}
+
+/* capas fantasma */
+.bio-glitch-x::before,
+.bio-glitch-x::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: #ef4444;
+  mix-blend-mode: screen;
+}
+
+/* capa izquierda */
+.bio-glitch-x::before {
+  opacity: 0.55;
+  animation: glitch-x-left 1.1s infinite steps(2, end);
+}
+
+/* capa derecha */
+.bio-glitch-x::after {
+  opacity: 0.45;
+  animation: glitch-x-right 0.9s infinite steps(2, end);
+}
+
+/* animaciones */
+@keyframes glitch-x-left {
+  0%   { transform: translate(0); clip-path: inset(0 0 0 0); }
+  15%  { transform: translate(-2px, 0); clip-path: inset(0 0 40% 0); }
+  30%  { transform: translate(-1px, 1px); clip-path: inset(30% 0 10% 0); }
+  45%  { transform: translate(0); clip-path: inset(0 0 0 0); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-x-right {
+  0%   { transform: translate(0); clip-path: inset(0 0 0 0); }
+  20%  { transform: translate(2px, 0); clip-path: inset(50% 0 0 0); }
+  40%  { transform: translate(1px, -1px); clip-path: inset(10% 0 30% 0); }
+  60%  { transform: translate(0); clip-path: inset(0 0 0 0); }
+  100% { transform: translate(0); }
+}
+
+
+@keyframes glitchScan {
+  0%   { transform: translateY(30%) skewX(0deg); opacity: 0; }
+  35%  { transform: translateY(10%) skewX(-6deg); opacity: 1; }
+  70%  { transform: translateY(-15%) skewX(6deg); opacity: 0.9; }
+  100% { transform: translateY(-30%) skewX(0deg); opacity: 0; }
+}

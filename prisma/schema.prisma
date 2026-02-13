@@ -1,0 +1,183 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")   // pooled (pgbouncer) para runtime
+  directUrl = env("DIRECT_URL")     // direct para migrate/dev/deploy
+}
+
+
+
+/**
+ * LEGACY
+ */
+model BlogPost {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  excerpt     String?
+  content     String
+  tags        String   @default("[]") // legacy JSON string
+  status      String   @default("draft") // draft | published
+  publishedAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TattooProject {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  style       String
+  bodyPart    String?
+  description String?
+  images      String   @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Track {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  title     String
+  genre     String
+  bpm       Int?
+  key       String?
+  links     String   @default("{}")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Artwork {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  medium      String?
+  description String?
+  images      String   @default("[]")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/**
+ * NUEVO CORE
+ */
+enum WorkType {
+  TATTOO
+  MUSIC
+  FILM
+  ART
+  DEV
+  JOURNAL
+}
+
+enum WorkStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+model Work {
+  id          String     @id @default(cuid())
+  type        WorkType
+  status      WorkStatus @default(DRAFT)
+
+  slug        String     @unique
+  title       String
+  excerpt     String?
+  content     String?
+
+  // SEO editorial (opcional, pero útil)
+  seoTitle       String?
+  seoDescription String?
+
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  media       Media[]
+  tags        WorkTag[]
+  linksFrom   WorkLink[] @relation("LinksFrom")
+  linksTo     WorkLink[] @relation("LinksTo")
+
+  @@index([type])
+  @@index([status])
+  @@index([publishedAt])
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  workId    String
+  work      Work     @relation(fields: [workId], references: [id], onDelete: Cascade)
+
+  kind      String   // image | video | audio | embed
+  url       String
+  alt       String?
+  width     Int?
+  height    Int?
+
+  order     Int      @default(0)
+  isCover   Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([workId])
+}
+
+model Tag {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+
+  works     WorkTag[]
+
+  createdAt DateTime @default(now())
+}
+
+model WorkTag {
+  workId String
+  tagId  String
+
+  work   Work @relation(fields: [workId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([workId, tagId])
+  @@index([tagId])
+}
+
+model WorkLink {
+  id        String   @id @default(cuid())
+
+  fromId    String
+  toId      String
+  label     String?
+
+  from      Work     @relation("LinksFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to        Work     @relation("LinksTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([fromId])
+  @@index([toId])
+}
+
+model SitePageIndex {
+  id          String   @id @default(cuid())
+  href        String   @unique
+  title       String
+  section     String?
+  labels      String[]
+  description String?
+  keywords    String[]
+  excerpt     String?
+  content     String?
+  source      String   @default("page")
+  workId      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([source])
+  @@index([section])
+}

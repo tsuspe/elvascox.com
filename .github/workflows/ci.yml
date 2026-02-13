@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: elvascox
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d elvascox"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/elvascox?schema=public
+      DIRECT_URL: postgresql://postgres:postgres@localhost:5432/elvascox?schema=public
+      ADMIN_PASSWORD: dummy
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      SITE_URL: http://localhost:3000
+      CRON_SECRET: dummy
+      SPECIAL_BLACKOUT_HREF: /tattoo/blackout
+      CLOUDINARY_CLOUD_NAME: dummy
+      CLOUDINARY_API_KEY: dummy
+      CLOUDINARY_API_SECRET: dummy
+      NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: dummy
+      NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET: dummy
+      OPENROUTER_API_KEY: dummy
+      OPENROUTER_MODEL: openai/gpt-4o-mini
+      OPENROUTER_SITE_URL: http://localhost:3000
+      OPENROUTER_APP_NAME: elvascox-ci
+      OLLAMA_BASE_URL: http://127.0.0.1:11434
+      OLLAMA_MODEL: llama3.1:8b
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Prisma migrate
+        run: npx prisma migrate deploy
+
+      - name: Seed base data
+        run: npm run seed
+
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build

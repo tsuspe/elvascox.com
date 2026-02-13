@@ -1,0 +1,44 @@
+/* src/app/globals.css */
+@import "tailwindcss";
+
+/* ✅ Dark always: no dependemos de prefers-color-scheme */
+:root {
+  /* Variables “sistema” */
+  --background: #000000;
+  --foreground: #e5e5e5;
+
+  /* Esto es CLAVE: le dice al navegador que el sitio es dark
+     (inputs, scrollbars, UI de Safari/Chrome móvil, etc.) */
+  color-scheme: dark;
+}
+
+/* Si quieres mantener tu @theme inline, lo dejamos, pero apuntando a dark */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  /* ✅ FIX DEFINITIVO PARA ANCHORS CON NAV STICKY */
+  scroll-behavior: smooth;
+  scroll-padding-top: 70px;
+
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ✅ Opcional: evita que algunos elementos “nativos” salgan claros */
+input,
+textarea,
+select,
+button {
+  color-scheme: dark;
+}
